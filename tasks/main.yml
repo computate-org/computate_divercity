@@ -1,0 +1,49 @@
+---
+- name: "install Development Tools dependency"
+  package:
+    name: "@Development Tools"
+    state: present
+  become: true
+  vars:
+    ansible_python_interpreter: "{{ APP_PYTHON }}"
+- name: "install Power Tools dependency"
+  package:
+    name: dnf-plugins-core
+    state: present
+  become: true
+  vars:
+    ansible_python_interpreter: "{{ APP_PYTHON }}"
+- name: "install {{ APP_NAME }} dependencies"
+  package:
+    name: "{{ APP_DEPENDENCIES }}"
+    state: present
+  become: true
+  vars:
+    ansible_python_interpreter: "{{ APP_PYTHON }}"
+- name: Create the directory {{ APP_SRC }}
+  file:
+    name: "{{ APP_SRC }}"
+    state: directory
+    owner: "{{ APP_USER }}"
+    group: "{{ APP_GROUP }}"
+  become: yes
+- name: Check for the {{ APP_NAME }} README file
+  stat:
+    path: "{{ APP_SRC }}/README.md"
+  register: APP_README_PATH
+- name: Clone the {{ APP_REPO }} source code into {{ APP_SRC }}
+  git:
+    repo: "{{ APP_REPO }}"
+    dest: "{{ APP_SRC }}"
+    version: "{{ APP_TAG }}"
+  when: not APP_README_PATH.stat.exists
+- name: Make the source code in {{ APP_SRC }}
+  shell:
+    cmd: ant
+    chdir: "{{ APP_SRC }}"
+- name: Create the launcher /usr/share/applications/{{ APP_NAME }}.desktop
+  template:
+    src: app.desktop
+    dest: "/usr/share/applications/{{ APP_NAME }}.desktop"
+  become: true
+

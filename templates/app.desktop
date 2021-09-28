@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Divercity
+Comment=Micropolis like Sim City
+Icon={{ APP_SRC }}/micropolisj.ico
+Exec=bash -c 'cd {{ APP_SRC }} && /usr/bin/java -jar {{ APP_SRC }}/micropolisj.jar'
+Terminal=false
+Categories=Game;
+

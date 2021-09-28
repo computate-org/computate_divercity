@@ -1,0 +1,12 @@
+---
+APP_PYTHON: "{{ '/usr/bin/python' if lookup('file', '/usr/bin/python', errors='ignore') else '/usr/bin/python3' }}"
+APP_NAME: divercity
+APP_DEPENDENCIES:
+  - java-latest-openjdk
+  - ant
+APP_USER: "{{ lookup('env', 'USER') }}"
+APP_GROUP: "{{ APP_USER }}"
+APP_SRC: "/usr/local/src/{{ APP_NAME  }}"
+APP_REPO: git@github.com:Team--Rocket/divercity.git
+APP_TAG: master
+
